@@ -23,15 +23,16 @@ else:
     gps = L76GNSS(pytrack=pt, timeout=30)
     iot = Startiot()
 
-    if iot.connect():
+    if iot.connect(blocking=True, timeout=15):
         lat, lng = gps.coordinates()
         bat = pt.read_battery_voltage()
 
         # if lat is not None and lng is not None:
 
+        pycom.rgbled(0xFF0000)
         iot.send("{},{},{},{},{}".format(lat, lng, tmp, hum, bat))
         sleep(5) # MUST use sleep. Else socket send won't work b4 a deep-sleep.
 
-    pt.setup_sleep(1200) # 1200
+    pt.setup_sleep(10) # 1200
 
 pt.go_to_sleep()
