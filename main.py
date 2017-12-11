@@ -18,7 +18,7 @@ tmp = sht.readTemp()
 hum = sht.readHum()
 
 if (tmp is None or hum is None):
-    pt.setup_sleep(10) # 3600
+    pt.setup_sleep(3600) # 3600
 else:
     gps = L76GNSS(pytrack=pt, timeout=30)
     iot = Startiot()
@@ -32,6 +32,6 @@ else:
         iot.send("{},{},{},{},{}".format(lat, lng, tmp, hum, bat))
         sleep(5) # MUST use sleep. Else socket send won't work b4 a deep-sleep.
 
-    pt.setup_sleep(10) # 1200
+    pt.setup_sleep(1200) # 1200
 
 pt.go_to_sleep()
