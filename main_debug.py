@@ -2,13 +2,25 @@ from startiot import Startiot
 from pytrack import Pytrack
 from L76GNSS import L76GNSS
 from SHT10 import SHT10
-from time import sleep
 import pycom
+import time
 
 data_pin = 'P10'
 sck_pin = 'P9'
 
 pycom.heartbeat(False)
+pycom.rgbled(0x000000)
+time.sleep(0.2)
+pycom.rgbled(0xFF0000)
+time.sleep(0.2)
+pycom.rgbled(0x000000)
+time.sleep(0.2)
+pycom.rgbled(0xFF0000)
+time.sleep(0.2)
+pycom.rgbled(0x000000)
+time.sleep(0.2)
+pycom.rgbled(0xFF0000)
+time.sleep(0.2)
 pycom.rgbled(0x000000)
 
 pt = Pytrack()
@@ -18,8 +30,13 @@ tmp = sht.readTemp()
 hum = sht.readHum()
 
 if (tmp is None or hum is None):
+    print("no data")
     pt.setup_sleep(10) # 3600
 else:
+    print("data")
+    pycom.rgbled(0x00FF00)
+    time.sleep(2)
+
     gps = L76GNSS(pytrack=pt, timeout=30)
     iot = Startiot()
 
@@ -27,10 +44,20 @@ else:
         lat, lng = gps.coordinates()
         bat = pt.read_battery_voltage()
 
-        # if lat is not None and lng is not None:
+        #if lat is not None and lng is not None:
+
+        print("sending to mic")
+
+        pycom.rgbled(0x00FF00)
+        time.sleep(1)
+        pycom.rgbled(0x0000FF)
+        time.sleep(1)
+        pycom.rgbled(0x00FF00)
+        time.sleep(1)
+        pycom.rgbled(0x0000FF)
+        time.sleep(1)
 
         iot.send("{},{},{},{},{}".format(lat, lng, tmp, hum, bat))
-        sleep(5) # MUST use sleep. Else socket send won't work b4 a deep-sleep.
 
     pt.setup_sleep(10) # 1200
 

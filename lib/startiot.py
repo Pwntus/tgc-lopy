@@ -7,10 +7,9 @@ import machine
 
 class Startiot:
   def __init__(self):
-    self.dev_eui = binascii.unhexlify("ffffffff00001281")
+    self.dev_eui = binascii.unhexlify("00000000000004A6")
     self.app_eui = binascii.unhexlify("00000000000000c8")
-    self.app_key = binascii.unhexlify("4e624150704e4b7248774f784e6d706a")
-
+    self.app_key = binascii.unhexlify("5772595539784c706e4a6364662b5957")
     self.lora = LoRa(mode=LoRa.LORAWAN)
 
   def connect(self, blocking = False, timeout = 0, function = None):
@@ -24,7 +23,6 @@ class Startiot:
           function()
     else:
       for x in range(timeout):
-        print("Joining...")
         if self.lora.has_joined():
           break
         if function == None:
